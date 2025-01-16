@@ -1,0 +1,29 @@
+name: ypay_inventory_example
+description: A new Flutter project.
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.1.1 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  ypay_inventory:
+    path: ../ypay_inventory
+  ypay: # оплата платежных сервисов Яндекс
+    git:
+      url: https://git.thehead.ru/adamas/yandex-pay-sdk.git
+      ref: ypay_1.0.3 # branch name
+      path: ypay
+
+  provider: ^6.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true

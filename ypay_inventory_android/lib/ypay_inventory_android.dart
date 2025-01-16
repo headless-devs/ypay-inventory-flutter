@@ -1,0 +1,1 @@
+export 'src/ypay_inventory_android_platform.dart';

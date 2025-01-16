@@ -1,0 +1,121 @@
+package com.yandex.pay.ypay_inventory_android.view
+
+import android.content.Context
+import android.widget.LinearLayout
+import com.yandex.pay.widgets.badge.api.view.YPayBadgeView
+import io.flutter.plugin.platform.PlatformView
+import io.flutter.plugin.platform.PlatformViewFactory
+import io.flutter.plugin.common.StandardMessageCodec
+import java.math.BigDecimal
+import java.util.EnumSet
+import android.view.View
+import com.yandex.pay.widgets.info.api.view.YPayInfoWidgetView
+import com.yandex.pay.widgets.info.api.model.render.WidgetType
+import com.yandex.pay.widgets.info.api.model.render.WidgetTheme
+import com.yandex.pay.widgets.info.api.model.render.WidgetStyle
+import android.view.ViewTreeObserver
+import io.flutter.plugin.common.BinaryMessenger
+import io.flutter.plugin.common.FlutterException
+import io.flutter.plugin.common.MethodCall
+import io.flutter.plugin.common.MethodChannel
+import android.util.TypedValue
+import android.widget.FrameLayout
+import android.view.View.MeasureSpec
+
+class YPayInfoWidgetPlatformView(
+    context: Context,
+    id: Int,
+    creationParams: Map<String?, Any?>?,
+    messenger: BinaryMessenger
+) :
+    PlatformView,
+    MethodChannel.MethodCallHandler {
+
+    private val yPayInfoView = YPayInfoWidgetView(context).apply {
+        layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+    }
+    private val controllerChannel =
+        MethodChannel(messenger, "com.yandex.pay.flutter_channel/ypay-info-widget-view_" + id)
+
+
+    init {
+
+        controllerChannel.setMethodCallHandler(this)
+        applyViewOptions(creationParams!!)
+
+        yPayInfoView.viewTreeObserver.addOnGlobalLayoutListener {
+            val width = yPayInfoView.measuredWidth
+            yPayInfoView.measure(
+                MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+            )
+            val height = yPayInfoView.measuredHeight
+            val heightDp = pxToDp(context, height)
+            // Отправляем размеры в Flutter
+            controllerChannel
+                .invokeMethod(
+                    "onSizeChanged", mapOf(
+                        "id" to id,
+                        "viewType" to "ypay-info-widget-view",
+                        "height" to heightDp
+                    )
+                )
+        }
+    }
+
+    override fun  dispose() {
+        controllerChannel.setMethodCallHandler(null);
+    }
+    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
+        when (call.method) {
+            "updateViewOptions" -> {
+                updateViewOptions(call)
+                result.success(null)
+            }
+
+            "waitForInit" -> {
+                result.success(null)
+            }
+
+            else -> result.notImplemented()
+        }
+    }
+
+    fun updateViewOptions(call: MethodCall) {
+        applyViewOptions(call.arguments as Map<String?, Any?>)
+    }
+
+    private fun applyViewOptions(params: Map<String?, Any?>) {
+        if (params["types"] != null) {
+            yPayInfoView.setTypes(
+                (params["types"] as? List<String>)?.mapNotNull {
+                    WidgetType.valueOf(it.uppercase())
+                }?.let {
+                    // Сразу создать EnumSet из списка элементов
+                    EnumSet.copyOf(it)
+                } ?: EnumSet.noneOf(WidgetType::class.java)
+            )
+        }
+        if (params["theme"] != null) {
+
+            yPayInfoView.setTheme(
+                WidgetTheme.valueOf((params!!["theme"] as? String)?.uppercase() ?: "SYSTEM")
+            )
+        }
+        if (params["sum"] != null) {
+            yPayInfoView.setSum(BigDecimal((params!!["sum"] as? Double) ?: 0.0))
+        }
+    }
+
+    override fun getView(): View {
+        return yPayInfoView
+    }
+
+    private fun pxToDp(context: Context, px: Int): Float {
+        val density = context.resources.displayMetrics.density
+        return px / density
+    }
+}

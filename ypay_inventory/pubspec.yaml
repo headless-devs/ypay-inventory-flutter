@@ -1,0 +1,34 @@
+name: ypay_inventory
+description: YPay Inventory Flutter SDK.
+version: 1.0.3
+publish_to: "none"
+
+environment:
+  sdk: ">=3.0.0  <4.0.0"
+  flutter: ">=2.0.0"
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        default_package: ypay_inventory_android
+      ios:
+        default_package: ypay_inventory_ios
+
+dependencies:
+  flutter:
+    sdk: flutter
+  ypay_inventory_android:
+    path: ../ypay_inventory_android
+  ypay_inventory_platform_interface:
+    path: ../ypay_inventory_platform_interface
+  ypay_inventory_ios:
+    path: ../ypay_inventory_ios
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.1
+
+analyzer:
+  exclude: ["**_test.dart"]

@@ -10,14 +10,8 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
-  ypay_inventory:
-    path: ../ypay_inventory
-  ypay: # оплата платежных сервисов Яндекс
-    git:
-      url: https://git.thehead.ru/adamas/yandex-pay-sdk.git
-      ref: ypay_1.0.3 # branch name
-      path: ypay
-
+  ypay_inventory: ^1.0.3
+  ypay: ^1.0.3
   provider: ^6.1.2
 
 dev_dependencies:

@@ -1,133 +1,160 @@
+# YPay Inventory Flutter Plugin
 
-Версии плагина Yandex Pay на момент написания (29.11.2024):  
-> **iOS** - 1.13.0  
-> **Android** - 2.3.10
-----------
-Официальная документация Yandex Pay
-[**iOS**](https://pay.yandex.ru/docs/ru/custom/ios-sdk/)
-[**Android**](https://pay.yandex.ru/docs/ru/custom/android-sdk/)
+YPay inventory Flutter Plugin позволяет интегрировать встроенные бейджи и виджеты YandexPaySDK в ваши проекты. Инвентарь — это набор визуальных элементов с брендированными продуктами Яндекса.
 
-## Технические требования
-Минимальная версия iOS - 14.0
+Библиотека реализует все варианты нативных бейджей и виджетов, включая их настройку и кастомизацию.
 
-## Android
-Минимальная версия SDK - 24
+# Описание
 
-----------
-Версия Flutter не ниже 2.0.0, версия Dart - не ниже 3.0.0.
-~~~
-/// pubspec.yaml
-environment:
-	sdk: ">=3.0.0 <4.0.0"
-	flutter: ">=2.0.0"
-~~~
+[Бейджи](https://pay.yandex.ru/docs/ru/custom/android-sdk/inventory/badges) — небольшие элементы на карточке товара, которые содержат информацию о кешбэке баллами Плюса или платежах Яндекс Сплит.\
+[Виджеты](https://pay.yandex.ru/docs/ru/custom/android-sdk/inventory/widgets) — это элементы интерфейса, которые сообщают пользователю о возможности оплатить покупку в рассрочку через Сплит или получить кешбэк.
 
-## **Подключение**
-Добавьте в pubspec.yaml проекта следующую зависимость:
-`ypay_inventory: ^0.0.2`
-или
-~~~
-ypay_inventory:  
-   git:  
-        url: https://git.thehead.ru/adamas/ypay_inventory.git  
-        ref: stable  
-        path: ypay_inventory
-~~~
-## **Создание YPayInventory**
-YPayInventory - класс для инициализации плагина.
-Создайте экземпляр YPayInventory и вызовите метод .init() с ключами Яндекса для инициализации:
+# Требования к подключению
 
-~~~
-final _ypayPlugin = YPayInventory.instance;  
-  
-Future<void> _init() async {  
-    await _ypayPlugin.init(  
-        configuration: const YPayInventoryConfiguration(  
-        merchantId: 'merchantId',  
-        merchantName: 'merchantName',  
-	    merchantUrl: 'merchantUrl',  
-	));  
-}
-~~~
-## **Основные виджеты**
+Поддерживаемая версия: **Android 7.0** и выше.\
+Поддерживаемая версия **iOS SDK: 14.0** и выше.
+
+Для полноценной работы инвентаря в вашем приложении желательно подключить и настроить **YPay SDK**. Убедитесь, что выполнили все шаги по подключению и протестировали работу бибилиотеки на обеих платформах. Подробнее можно ознакомиться на странице пакета [ypay](https://pub.dev/packages/ypay)
+
+# Подключение
+
+Добавьте это в файл pubspec.yaml вашего пакета:
+
+```yaml
+dependencies:
+  ypay_inventory: ^1.0.3
+```
+
+# Использование
+
+Для ознакомления доступно example приложение с настройками проекта и всеми вариантами виджетов и бейджей, а также их кастомизация.
+
+**Добавление импорта:**
+```dart
+import 'package:ypay_inventory/ypay_inventory.dart';
+``` 
+
+
+**Создание экземпляра:**
+```dart
+final ypayInventoryPlugin = YPayInventory.instance;
+``` 
+
+**Инициализируйте инвентарь:**
+```dart
+ypayInventoryPlugin.init(
+  configuration: const Configuration(
+      // ваш Merchant ID
+      merchantId: 'your merchant id',
+      // название вашего магазина
+      merchantName: 'Demo Merchant',
+      // ссылка на ваш магазин
+      merchantUrl: "https://example.ru/",
+      // [необзятально] режим отладки (по умолчанию - true)
+      testMode: true,
+      // [необзятально] режим скрытия бейджей в случае отсутствия данных (по умолчанию - YPayBadgeHidingPolicy.gone)
+      badgeHidingPolicy: YPayBadgeHidingPolicy.gone,
+    ),
+  );
+``` 
+
+# Основные виджеты
 
 К бейджам относится **YPayBadge**, к виджетам - **YPaySimpleWidgetView**, **YPayInfoWidgetView** и **YPayBnplPreviewWidgetView**.
 
-Все бейджи и виджеты - это нативные view, которые показываются через PlatformView.
+- Названия и свойства виджетов основаны на Android SDK.
+- Все бейджи и виджеты - это нативные view, которые показываются через PlatformView.
+- Для каждого бейджа или виджета обязательным аргументом является сумма (стоимость товара).  
+- У каждого бейджа и виджета можно изменить тему: системная, светлая, темная.
+- Все виджеты имеют минимальную ширину равную 280 pt.
 
-Каждый бейдж и виджет обязательным параметром принимает в себя сумму (стоимость товара).
+**Android**\
+Для корректного завершения работы с компонентами бейджей, используйте следующий код:
 
-У каждого бейджа и виджета можно изменить тему (системная, светлая, темная).
+```dart
+/// деинициализация компонентов бейджей:
+ypayInventoryPlugin.clear()
+```
 
-> Все **виджеты** имеют минимальную ширину равную 280 pt.
+#### YPayBadge
 
-### YPayBadge
+Виджет для показа бейджей.\
+Есть два типа виджетов - кэшбэк и сплит. **CashbackBadgeRenderData** вернет бейдж с кэшбэком, **SplitBadgeRenderData** вернет бейдж со сплитом.  
 
-Виджет для показа бейджей. Бейджи — небольшие элементы интерфейса, которые содержат информацию о кешбэке Плюса или платежах Яндекс Сплит.  
-Есть два типа виджетов - кэшбэк и сплит. Они отличаются передаваемыми параметрами (**CashbackBadgeRenderData** вернет бейдж с кэшбэком, **SplitBadgeRenderData** вернет бейдж со сплитом).  
-
-![IMAGE 2024-12-02 19:45:20](https://github.com/user-attachments/assets/f9b0f3c4-a93a-437b-9032-612fd94a452b)
-![IMAGE 2024-12-02 19:45:45](https://github.com/user-attachments/assets/18a82857-7d74-4100-8c0a-58df038b5d84)
-~~~
+```dart
 /// Бейдж кэшбэка
 return YPayBadge(
 	sum: 1230,
 	width: 200,
 	renderData: CashbackBadgeRenderData(
+		// Тема виджета: светлая (YPayWidgetTheme.light), или темная (YPayWidgetTheme.dark), или системная (YPayWidgetTheme.system)
 		theme: YPayBadgeTheme.system,
+		// Выравнивание бейджа относительно контейнера: (YPayBadgeAlign.left, YPayBadgeAlign.center, YPayBadgeAlign.right)
 		align: YPayBadgeAlign.left,
+		// Цвет бейджа: (SplitBadgeColor.primary, SplitBadgeColor.green, SplitBadgeColor.grey, SplitBadgeColor.transparent)
 		color: CashbackBadgeColor.primary,
+		// Версия бейджа
 		variant: CashbackBadgeVariant.detailed,
 	),
 );
-~~~
-~~~
+```
+
+```dart
 /// Бейдж сплита
 return YPayBadge(
 	sum: 1230,
 	width: 200,
 	renderData: SplitBadgeRenderData(
-		theme: YPayBadgeTheme.system,
+		// Тема виджета: светлая (YPayWidgetTheme.light), или темная (YPayWidgetTheme.dark), или системная (YPayWidgetTheme.system)
+		theme: YPayBadgeTheme.system, 
+		// Выравнивание бейджа относительно контейнера: (YPayBadgeAlign.left, YPayBadgeAlign.center, YPayBadgeAlign.right)
 		align: YPayBadgeAlign.left,
+		// Цвет бейджа: (SplitBadgeColor.primary, SplitBadgeColor.green, SplitBadgeColor.grey, SplitBadgeColor.transparent)
 		color: SplitBadgeColor.primary,
-		variant: SplitBadgeVariant.detailed,
+		// Версия бейджа, только для типа со Сплитом
+		variant: SplitBadgeVariant.simple,
 	),
 );
-~~~
+```
 
-### YPaySimpleWidgetView
-![IMAGE 2024-12-02 19:46:08](https://github.com/user-attachments/assets/6c7f352d-d8cc-4b29-8d74-5e70aa233955)
+#### YPaySimpleWidgetView
 
-Отображение можно настроить так, чтобы показывался только сплит, только кэшбэк или оба блока сразу. Клик на блок открывает соответствующую модалку с информацией. По умолчанию содержит оба блока.
+По умолчанию содержит в себе два блока: Сплит и баллы Плюса. На каждый блок можно нажать и перейти на страницу соответствующего лендинга с более подробной информацией о продуктах Сплита и Плюса.
 
-~~~
+```dart
 return YPaySimpleWidgetView(
-	sum: controllers.selectedValues.amount,
+	// Сумма заказа
+	sum: 10000,
 	renderData: SimpleWidgetRenderData(
+		// Настройки прозрачности: сплошной (YPayWidgetStyle.solid) или прозрачный (YPayWidgetStyle.transparent)
 		style: YPayWidgetStyle.solid,
+		// Тема виджета: светлая (YPayWidgetTheme.light), или темная (YPayWidgetTheme.dark), или системная (YPayWidgetTheme.system)
 		theme: YPayWidgetTheme.system,
+		// Тип данных в виджете: Сплит, кешбэк или оба варианта
 		types: {YPayWidgetType.split, YPayWidgetType.cashback},
 	),
 );
-~~~
+```
 
-### YPayInfoWidgetView
-![IMAGE 2024-12-02 19:46:35](https://github.com/user-attachments/assets/4506adbe-102e-45a6-ae14-885db5d64d20)
+#### YPayInfoWidgetView
 
 Отображение можно настроить так, чтобы показывался только сплит, только кэшбэк или три блока сразу. По умолчанию содержит в себе три секции: баллы Плюса, BNPL-план Сплита и информацию об оплате без первоначального взноса.
 
-~~~
+```dart
 return YPayInfoWidgetView(
+	// Сумма заказа
 	sum: 1230,
 	renderData: InfoWidgetRenderData(
+		// Тема виджета: светлая (YPayWidgetTheme.light), или темная (YPayWidgetTheme.dark), или системная (YPayWidgetTheme.system)
 		theme: YPayWidgetTheme.system,
+		// Тип данных в виджете: Сплит, кешбэк или оба варианта
 		types: {YPayWidgetType.split, YPayWidgetType.cashback},
 	),
 );
-~~~
+```
 
-### YPayBnplPreviewWidgetView
-![IMAGE 2024-12-02 19:47:01](https://github.com/user-attachments/assets/3840dc2d-2ef2-499d-8be2-526945e2a69b)
+#### YPayBnplPreviewWidgetView
+
 Кастомизируемый BNPL-виджет позволяет предварительно ознакомиться с условиями доступных некредитных планов Сплит и выбрать подходящий.  
 Виджет состоит из четырех частей:
 -   Кликабельная шапка с логотипом Сплит и краткой информацией о платежах и комиссии выбранного плана;
@@ -135,20 +162,48 @@ return YPayInfoWidgetView(
 -   Информация о платежах по датам;
 -   Кнопка «Оформить» (по умолчанию скрыта).
 
-Для шапки и кнопки "Оформить" можно задать свои функции на клик.
+Для шапки и кнопки «Оформить» можно задать свои функции на клик.
 
-~~~
+Виджет изменяет ширину, чтобы соблюдать установленные ограничения, однако для каждой его конфигурации существует минимальная ширина. Виджет динамически рассчитывает собственную высоту в зависимости от контента, поэтому мы не рекомендуем добавлять для нее дополнительные constraints.
+
+
+```dart
 return YPayBnplPreviewWidgetView(
-    sum: 1230,          
+	// Сумма заказа
+    sum: 1230,
+	// Слушатель клика по шапке виджета (при установленном YPayWidgetHeader.standard)
+	onHeaderClick: () {
+	// Показ информации об оплате частями
+	},
+	// Слушатель клика по кнопке «Оформить» (параметр selectedPlan содержит количество месяцев выбранного плана Сплита)
+	onCheckoutButtonClick: (int selectedPlan) {
+	// Переход на экран оплаты
+	},    
 	renderData: BnplPreviewWidgetRenderData(
-        theme: YPayWidgetTheme.system,
+		// Тема виджета: светлая (YPayWidgetTheme.light), или темная (YPayWidgetTheme.dark), или системная (YPayWidgetTheme.system)
+		theme: YPayWidgetTheme.system,
+		// Тип отображения шапки виджета: стандартный (YPayWidgetHeader.standard) или уменьшенный (YPayWidgetHeader.minified)
 		header: YPayWidgetHeader.standard
+		// Фон виджета: стандартный (YPayWidgetBackground.standard), прозрачный (YPayWidgetBackground.transparent) или произвольный (YPayWidgetBackground.custom)
 		background: YPayWidgetBackground.standard,
+		// Наличие обводки виджета
 		hasOutline: true
+		// Радиус виджета в пикселях
 		radius: 30
+		// Наличие внутреннего отступа виджета
 		hasPadding: true
+		// Размер виджета: средний (YPayWidgetSize.medium) или маленький (YPayWidgetSize.small)
 		size: YPayWidgetSize.medium,
+		// Наличие кнопки «Оформить»
 		hasCheckoutButton: false,
+		// Цвет фона виджета (при установленном YPayWidgetBackground.custom)
+		backgroundColor: 0x000000,
 	),
 );
-~~~
+```
+
+# Пример отображения
+
+Рекомендуем запустить example для ознакомления со всеми вариантами кастомизации и отображения или посетить официальные страницы виджетов и бейджей для iOS и Android.
+
+![View](https://raw.githubusercontent.com/headless-devs/ypay-inventory-flutter/refs/heads/stable/assets/views.png)

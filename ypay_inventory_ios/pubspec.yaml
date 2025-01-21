@@ -1,7 +1,8 @@
 name: ypay_inventory_ios
 description: "YPay iOS SDK"
 version: 1.0.3
-publish_to: none
+repository: https://github.com/headless-devs/ypay-inventory-flutter
+homepage: https://thehead.ru/
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -11,8 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
-  ypay_inventory_platform_interface:
-    path: ../ypay_inventory_platform_interface
+  ypay_inventory_platform_interface: ^1.0.3
 
 dev_dependencies:
   flutter_test:

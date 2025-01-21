@@ -9,8 +9,7 @@ void main() {
 
   setUp(() {
     YPayInventoryAndroidPlatform.registerPlatform();
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(inventoryChannel, ypayMockMethodCallHandler);
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(inventoryChannel, ypayMockMethodCallHandler);
   });
 
   tearDown(
@@ -30,9 +29,7 @@ void main() {
         merchantUrl: 'merchantUrl',
       );
 
-      await YPayInventoryPlatform.instance
-          .init(configuration: validConfig)
-          .then((value) => completer.complete('initialized'));
+      await YPayInventoryPlatform.instance.init(configuration: validConfig).then((value) => completer.complete('initialized'));
 
       expect(completer.isCompleted, isTrue);
     },
@@ -47,8 +44,7 @@ void main() {
         merchantUrl: '',
       );
 
-      expect(() async => YPayInventoryPlatform.instance.init(configuration: invalidConfig),
-          throwsA(isA<YPayInventoryInitializeError>()));
+      expect(() async => YPayInventoryPlatform.instance.init(configuration: invalidConfig), throwsA(isA<YPayInventoryInitializeError>()));
     },
   );
 }

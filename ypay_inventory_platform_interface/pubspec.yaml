@@ -1,6 +1,8 @@
 name: ypay_inventory_platform_interface
 description: Platform interface for Yandex Pay SDK.
 version: 1.0.3
+repository: https://github.com/headless-devs/ypay-inventory-flutter
+homepage: https://thehead.ru/
 
 environment:
   sdk: '>=3.0.0 <4.0.0'

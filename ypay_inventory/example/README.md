@@ -14,8 +14,7 @@ YPay inventory Flutter Plugin позволяет интегрировать вс
 Поддерживаемая версия: **Android 7.0** и выше.\
 Поддерживаемая версия **iOS SDK: 14.0** и выше.
 
-Для работы инвентаря в вашем приложении необходимо подключить и настроить **YPay SDK**. Убедитесь, что выполнили все шаги по подключению и протестировали работу бибилиотеки на обеих платформах. Подробнее можно ознакомиться на странице пакета [ypay](https://pub.dev/packages/ypay)
-
+Для полноценной работы инвентаря в вашем приложении желательно подключить и настроить **YPay SDK**. Убедитесь, что выполнили все шаги по подключению и протестировали работу бибилиотеки на обеих платформах. Подробнее можно ознакомиться на странице пакета [ypay](https://pub.dev/packages/ypay)
 
 # Подключение
 
@@ -45,31 +44,31 @@ final ypayInventoryPlugin = YPayInventory.instance;
 ```dart
 ypayInventoryPlugin.init(
   configuration: const Configuration(
-	  // ваш Merchant ID
-	  merchantId: 'your merchant id',
-	  // название вашего магазина
-	  merchantName: 'Demo Merchant',
-	  // ссылка на ваш магазин
-	  merchantUrl: "https://example.ru/",
-	  // [необзятально] режим отладки (по умолчанию - true)
-	  testMode: true,
-	  // [необзятально] режим скрытия бейджей в случае отсутствия данных (по умолчанию - YPayBadgeHidingPolicy.gone)
-	  badgeHidingPolicy: YPayBadgeHidingPolicy.gone,
-	),
+      // ваш Merchant ID
+      merchantId: 'your merchant id',
+      // название вашего магазина
+      merchantName: 'Demo Merchant',
+      // ссылка на ваш магазин
+      merchantUrl: "https://example.ru/",
+      // [необзятально] режим отладки (по умолчанию - true)
+      testMode: true,
+      // [необзятально] режим скрытия бейджей в случае отсутствия данных (по умолчанию - YPayBadgeHidingPolicy.gone)
+      badgeHidingPolicy: YPayBadgeHidingPolicy.gone,
+    ),
   );
 ``` 
-
 
 # Основные виджеты
 
 К бейджам относится **YPayBadge**, к виджетам - **YPaySimpleWidgetView**, **YPayInfoWidgetView** и **YPayBnplPreviewWidgetView**.
 
+- Названия и свойства виджетов основаны на Android SDK.
 - Все бейджи и виджеты - это нативные view, которые показываются через PlatformView.
 - Для каждого бейджа или виджета обязательным аргументом является сумма (стоимость товара).  
 - У каждого бейджа и виджета можно изменить тему: системная, светлая, темная.
 - Все виджеты имеют минимальную ширину равную 280 pt.
 
-**Android** 
+**Android**\
 Для корректного завершения работы с компонентами бейджей, используйте следующий код:
 
 ```dart
@@ -79,42 +78,42 @@ ypayInventoryPlugin.clear()
 
 #### YPayBadge
 
-Виджет для показа бейджей. Бейджи — небольшие элементы интерфейса, которые содержат информацию о кешбэке Плюса или платежах Яндекс Сплит.  
-Есть два типа виджетов - кэшбэк и сплит. Они отличаются передаваемыми параметрами (**CashbackBadgeRenderData** вернет бейдж с кэшбэком, **SplitBadgeRenderData** вернет бейдж со сплитом).  
+Виджет для показа бейджей.\
+Есть два типа виджетов - кэшбэк и сплит. **CashbackBadgeRenderData** вернет бейдж с кэшбэком, **SplitBadgeRenderData** вернет бейдж со сплитом.  
 
 ```dart
 /// Бейдж кэшбэка
 return YPayBadge(
-	sum: 1230,
-	width: 200,
-	renderData: CashbackBadgeRenderData(
-		// Тема виджета: светлая (YPayWidgetTheme.light), или темная (YPayWidgetTheme.dark), или системная (YPayWidgetTheme.system)
-		theme: YPayBadgeTheme.system,
-		// Выравнивание бейджа относительно контейнера: (YPayBadgeAlign.left, YPayBadgeAlign.center, YPayBadgeAlign.right)
-		align: YPayBadgeAlign.left,
-		// Цвет бейджа: (SplitBadgeColor.primary, SplitBadgeColor.green, SplitBadgeColor.grey, SplitBadgeColor.transparent)
-		color: CashbackBadgeColor.primary,
-		// Версия бейджа
-		variant: CashbackBadgeVariant.detailed,
-	),
+  sum: 1230,
+  width: 200,
+  renderData: CashbackBadgeRenderData(
+    // Тема виджета: светлая (YPayWidgetTheme.light), или темная (YPayWidgetTheme.dark), или системная (YPayWidgetTheme.system)
+    theme: YPayBadgeTheme.system,
+    // Выравнивание бейджа относительно контейнера: (YPayBadgeAlign.left, YPayBadgeAlign.center, YPayBadgeAlign.right)
+    align: YPayBadgeAlign.left,
+    // Цвет бейджа: (SplitBadgeColor.primary, SplitBadgeColor.green, SplitBadgeColor.grey, SplitBadgeColor.transparent)
+    color: CashbackBadgeColor.primary,
+    // Версия бейджа
+    variant: CashbackBadgeVariant.detailed,
+  ),
 );
 ```
 
 ```dart
 /// Бейдж сплита
 return YPayBadge(
-	sum: 1230,
-	width: 200,
-	renderData: SplitBadgeRenderData(
-		// Тема виджета: светлая (YPayWidgetTheme.light), или темная (YPayWidgetTheme.dark), или системная (YPayWidgetTheme.system)
-		theme: YPayBadgeTheme.system, 
-		// Выравнивание бейджа относительно контейнера: (YPayBadgeAlign.left, YPayBadgeAlign.center, YPayBadgeAlign.right)
-		align: YPayBadgeAlign.left,
-		// Цвет бейджа: (SplitBadgeColor.primary, SplitBadgeColor.green, SplitBadgeColor.grey, SplitBadgeColor.transparent)
-		color: SplitBadgeColor.primary,
-		// Версия бейджа, только для типа со Сплитом
-		variant: SplitBadgeVariant.simple,
-	),
+  sum: 1230,
+  width: 200,
+  renderData: SplitBadgeRenderData(
+    // Тема виджета: светлая (YPayWidgetTheme.light), или темная (YPayWidgetTheme.dark), или системная (YPayWidgetTheme.system)
+    theme: YPayBadgeTheme.system, 
+    // Выравнивание бейджа относительно контейнера: (YPayBadgeAlign.left, YPayBadgeAlign.center, YPayBadgeAlign.right)
+    align: YPayBadgeAlign.left,
+    // Цвет бейджа: (SplitBadgeColor.primary, SplitBadgeColor.green, SplitBadgeColor.grey, SplitBadgeColor.transparent)
+    color: SplitBadgeColor.primary,
+    // Версия бейджа, только для типа со Сплитом
+    variant: SplitBadgeVariant.simple,
+  ),
 );
 ```
 
@@ -124,16 +123,16 @@ return YPayBadge(
 
 ```dart
 return YPaySimpleWidgetView(
-	// Сумма заказа
-	sum: 10000,
-	renderData: SimpleWidgetRenderData(
-		// Настройки прозрачности: сплошной (YPayWidgetStyle.solid) или прозрачный (YPayWidgetStyle.transparent)
-		style: YPayWidgetStyle.solid,
-		// Тема виджета: светлая (YPayWidgetTheme.light), или темная (YPayWidgetTheme.dark), или системная (YPayWidgetTheme.system)
-		theme: YPayWidgetTheme.system,
-		// Тип данных в виджете: Сплит, кешбэк или оба варианта
-		types: {YPayWidgetType.split, YPayWidgetType.cashback},
-	),
+  // Сумма заказа
+  sum: 10000,
+  renderData: SimpleWidgetRenderData(
+    // Настройки прозрачности: сплошной (YPayWidgetStyle.solid) или прозрачный (YPayWidgetStyle.transparent)
+    style: YPayWidgetStyle.solid,
+    // Тема виджета: светлая (YPayWidgetTheme.light), или темная (YPayWidgetTheme.dark), или системная (YPayWidgetTheme.system)
+    theme: YPayWidgetTheme.system,
+    // Тип данных в виджете: Сплит, кешбэк или оба варианта
+    types: {YPayWidgetType.split, YPayWidgetType.cashback},
+  ),
 );
 ```
 
@@ -143,14 +142,14 @@ return YPaySimpleWidgetView(
 
 ```dart
 return YPayInfoWidgetView(
-	// Сумма заказа
-	sum: 1230,
-	renderData: InfoWidgetRenderData(
-		// Тема виджета: светлая (YPayWidgetTheme.light), или темная (YPayWidgetTheme.dark), или системная (YPayWidgetTheme.system)
-		theme: YPayWidgetTheme.system,
-		// Тип данных в виджете: Сплит, кешбэк или оба варианта
-		types: {YPayWidgetType.split, YPayWidgetType.cashback},
-	),
+  // Сумма заказа
+  sum: 1230,
+  renderData: InfoWidgetRenderData(
+    // Тема виджета: светлая (YPayWidgetTheme.light), или темная (YPayWidgetTheme.dark), или системная (YPayWidgetTheme.system)
+    theme: YPayWidgetTheme.system,
+    // Тип данных в виджете: Сплит, кешбэк или оба варианта
+    types: {YPayWidgetType.split, YPayWidgetType.cashback},
+  ),
 );
 ```
 
@@ -170,36 +169,36 @@ return YPayInfoWidgetView(
 
 ```dart
 return YPayBnplPreviewWidgetView(
-	// Сумма заказа
-	sum: 1230,
-	// Слушатель клика по шапке виджета (при установленном YPayWidgetHeader.standard)
-	onHeaderClick: () {
-	// Показ информации об оплате частями
-	},
-	// Слушатель клика по кнопке «Оформить» (параметр selectedPlan содержит количество месяцев выбранного плана Сплита)
-	onCheckoutButtonClick: (int selectedPlan) {
-	// Переход на экран оплаты
-	},    
-	renderData: BnplPreviewWidgetRenderData(
-		// Тема виджета: светлая (YPayWidgetTheme.light), или темная (YPayWidgetTheme.dark), или системная (YPayWidgetTheme.system)
-		theme: YPayWidgetTheme.system,
-		// Тип отображения шапки виджета: стандартный (YPayWidgetHeader.standard) или уменьшенный (YPayWidgetHeader.minified)
-		header: YPayWidgetHeader.standard
-		// Фон виджета: стандартный (YPayWidgetBackground.standard), прозрачный (YPayWidgetBackground.transparent) или произвольный (YPayWidgetBackground.custom)
-		background: YPayWidgetBackground.standard,
-		// Наличие обводки виджета
-		hasOutline: true
-		// Радиус виджета в пикселях
-		radius: 30
-		// Наличие внутреннего отступа виджета
-		hasPadding: true
-		// Размер виджета: средний (YPayWidgetSize.medium) или маленький (YPayWidgetSize.small)
-		size: YPayWidgetSize.medium,
-		// Наличие кнопки «Оформить»
-		hasCheckoutButton: false,
-		// Цвет фона виджета (при установленном YPayWidgetBackground.custom)
-		backgroundColor: 0x000000,
-	),
+  // Сумма заказа
+    sum: 1230,
+  // Слушатель клика по шапке виджета (при установленном YPayWidgetHeader.standard)
+  onHeaderClick: () {
+  // Показ информации об оплате частями
+  },
+  // Слушатель клика по кнопке «Оформить» (параметр selectedPlan содержит количество месяцев выбранного плана Сплита)
+  onCheckoutButtonClick: (int selectedPlan) {
+  // Переход на экран оплаты
+  },    
+  renderData: BnplPreviewWidgetRenderData(
+    // Тема виджета: светлая (YPayWidgetTheme.light), или темная (YPayWidgetTheme.dark), или системная (YPayWidgetTheme.system)
+    theme: YPayWidgetTheme.system,
+    // Тип отображения шапки виджета: стандартный (YPayWidgetHeader.standard) или уменьшенный (YPayWidgetHeader.minified)
+    header: YPayWidgetHeader.standard
+    // Фон виджета: стандартный (YPayWidgetBackground.standard), прозрачный (YPayWidgetBackground.transparent) или произвольный (YPayWidgetBackground.custom)
+    background: YPayWidgetBackground.standard,
+    // Наличие обводки виджета
+    hasOutline: true
+    // Радиус виджета в пикселях
+    radius: 30
+    // Наличие внутреннего отступа виджета
+    hasPadding: true
+    // Размер виджета: средний (YPayWidgetSize.medium) или маленький (YPayWidgetSize.small)
+    size: YPayWidgetSize.medium,
+    // Наличие кнопки «Оформить»
+    hasCheckoutButton: false,
+    // Цвет фона виджета (при установленном YPayWidgetBackground.custom)
+    backgroundColor: 0x000000,
+  ),
 );
 ```
 
@@ -207,4 +206,4 @@ return YPayBnplPreviewWidgetView(
 
 Рекомендуем запустить example для ознакомления со всеми вариантами кастомизации и отображения или посетить официальные страницы виджетов и бейджей для iOS и Android.
 
-![View](/assets/views.png){ width=50% }
+![View](assets/views.png)

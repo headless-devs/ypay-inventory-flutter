@@ -1,6 +1,6 @@
 name: ypay_inventory
 description: YPay inventory Flutter Plugin для библиотеки YPay Flutter позволяет интегрировать встроенные бейджи и виджеты YandexPaySDK в ваши проекты. Инвентарь — это набор визуальных элементов с брендированными продуктами Яндекса.
-version: 1.0.3
+version: 1.0.3+1
 repository: https://github.com/headless-devs/ypay-inventory-flutter
 issue_tracker: https://github.com/headless-devs/ypay-inventory-flutter/issues
 homepage: https://thehead.ru/

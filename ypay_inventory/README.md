@@ -60,6 +60,8 @@ ypayInventoryPlugin.init(
 
 # Основные виджеты
 
+Визуально посмотреть все возможные варианты состояния виджетов можно на официальной на [странице](https://pay.yandex.ru/docs/ru/custom/android-sdk/inventory/widgets) нативного SDK
+
 К бейджам относится **YPayBadge**, к виджетам - **YPaySimpleWidgetView**, **YPayInfoWidgetView** и **YPayBnplPreviewWidgetView**.
 
 - Названия и свойства виджетов основаны на Android SDK.

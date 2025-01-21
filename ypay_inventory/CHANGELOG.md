@@ -1,3 +1,8 @@
+## 1.0.3+1
+
+* Update README.md.
+* Added example app.
+
 ## 1.0.3
 
 * Added support native Widgets and Badges.

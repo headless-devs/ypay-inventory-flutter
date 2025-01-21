@@ -14,8 +14,7 @@ YPay inventory Flutter Plugin позволяет интегрировать вс
 Поддерживаемая версия: **Android 7.0** и выше.\
 Поддерживаемая версия **iOS SDK: 14.0** и выше.
 
-Для работы инвентаря в вашем приложении необходимо подключить и настроить **YPay SDK**. Убедитесь, что выполнили все шаги по подключению и протестировали работу бибилиотеки на обеих платформах. Подробнее можно ознакомиться на странице пакета [ypay](https://pub.dev/packages/ypay)
-
+Для полноценной работы инвентаря в вашем приложении желательно подключить и настроить **YPay SDK**. Убедитесь, что выполнили все шаги по подключению и протестировали работу бибилиотеки на обеих платформах. Подробнее можно ознакомиться на странице пакета [ypay](https://pub.dev/packages/ypay)
 
 # Подключение
 
@@ -45,31 +44,31 @@ final ypayInventoryPlugin = YPayInventory.instance;
 ```dart
 ypayInventoryPlugin.init(
   configuration: const Configuration(
-	  // ваш Merchant ID
-	  merchantId: 'your merchant id',
-	  // название вашего магазина
-	  merchantName: 'Demo Merchant',
-	  // ссылка на ваш магазин
-	  merchantUrl: "https://example.ru/",
-	  // [необзятально] режим отладки (по умолчанию - true)
-	  testMode: true,
-	  // [необзятально] режим скрытия бейджей в случае отсутствия данных (по умолчанию - YPayBadgeHidingPolicy.gone)
-	  badgeHidingPolicy: YPayBadgeHidingPolicy.gone,
-	),
+      // ваш Merchant ID
+      merchantId: 'your merchant id',
+      // название вашего магазина
+      merchantName: 'Demo Merchant',
+      // ссылка на ваш магазин
+      merchantUrl: "https://example.ru/",
+      // [необзятально] режим отладки (по умолчанию - true)
+      testMode: true,
+      // [необзятально] режим скрытия бейджей в случае отсутствия данных (по умолчанию - YPayBadgeHidingPolicy.gone)
+      badgeHidingPolicy: YPayBadgeHidingPolicy.gone,
+    ),
   );
 ``` 
-
 
 # Основные виджеты
 
 К бейджам относится **YPayBadge**, к виджетам - **YPaySimpleWidgetView**, **YPayInfoWidgetView** и **YPayBnplPreviewWidgetView**.
 
+- Названия и свойства виджетов основаны на Android SDK.
 - Все бейджи и виджеты - это нативные view, которые показываются через PlatformView.
 - Для каждого бейджа или виджета обязательным аргументом является сумма (стоимость товара).  
 - У каждого бейджа и виджета можно изменить тему: системная, светлая, темная.
 - Все виджеты имеют минимальную ширину равную 280 pt.
 
-**Android** 
+**Android**\
 Для корректного завершения работы с компонентами бейджей, используйте следующий код:
 
 ```dart
@@ -79,8 +78,8 @@ ypayInventoryPlugin.clear()
 
 #### YPayBadge
 
-Виджет для показа бейджей. Бейджи — небольшие элементы интерфейса, которые содержат информацию о кешбэке Плюса или платежах Яндекс Сплит.  
-Есть два типа виджетов - кэшбэк и сплит. Они отличаются передаваемыми параметрами (**CashbackBadgeRenderData** вернет бейдж с кэшбэком, **SplitBadgeRenderData** вернет бейдж со сплитом).  
+Виджет для показа бейджей.\
+Есть два типа виджетов - кэшбэк и сплит. **CashbackBadgeRenderData** вернет бейдж с кэшбэком, **SplitBadgeRenderData** вернет бейдж со сплитом.  
 
 ```dart
 /// Бейдж кэшбэка
@@ -171,7 +170,7 @@ return YPayInfoWidgetView(
 ```dart
 return YPayBnplPreviewWidgetView(
 	// Сумма заказа
-	sum: 1230,
+    sum: 1230,
 	// Слушатель клика по шапке виджета (при установленном YPayWidgetHeader.standard)
 	onHeaderClick: () {
 	// Показ информации об оплате частями
@@ -207,4 +206,4 @@ return YPayBnplPreviewWidgetView(
 
 Рекомендуем запустить example для ознакомления со всеми вариантами кастомизации и отображения или посетить официальные страницы виджетов и бейджей для iOS и Android.
 
-![View](/assets/views.png){ width=50% }
+![View](https://raw.githubusercontent.com/headless-devs/ypay-inventory-flutter/refs/heads/stable/assets/views.png)

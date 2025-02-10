@@ -5,7 +5,7 @@
 Pod::Spec.new do |s|
   s.static_framework = true 
   s.name             = 'ypay_inventory_ios'
-  s.version          = '1.0.3'
+  s.version          = '1.0.3+1'
   s.summary          = 'YPay Invetory Plugin'
   s.description      = <<-DESC
 The implementation of 'ypay_inventory' plugin for the iOS platform
@@ -15,7 +15,7 @@ The implementation of 'ypay_inventory' plugin for the iOS platform
   s.author           = { 'Vasily Borovoy' => 'borovoy@thehead.ru' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
-  s.dependency 'YandexPaySDK/Static'
+  s.dependency 'YandexPaySDK', '~> 1.13.0'
   s.dependency 'Flutter'
   s.platform = :ios, '14.0'
 
